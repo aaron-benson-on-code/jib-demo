@@ -1,6 +1,7 @@
 plugins {
 	id 'org.springframework.boot' version '2.2.2.RELEASE'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+	id 'com.google.cloud.tools.jib' version '2.0.0'
 	id 'java'
 }
 
@@ -20,6 +21,24 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok:1.18.12'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+}
+
+jib {
+	from {
+		image = 'adoptopenjdk/openjdk11:alpine'
+	}
+
+	to {
+		image = 'your_aws_account_#.dkr.ecr.us-east-1.amazonaws.com/jib-demo'
+		tags = ['1.0']
+	}
+
+	container {
+		appRoot = '/app'
+		creationTime = 'USE_CURRENT_TIMESTAMP'
+		ports = ['8080']
+		user = 100
 	}
 }
 
